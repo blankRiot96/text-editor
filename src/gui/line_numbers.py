@@ -1,15 +1,16 @@
 import pygame
 
 from src import window
-from src.gui.stack import Align, Stack
 
 
-class LineNumbers(Stack):
+class LineNumbers:
     def __init__(self) -> None:
-        super().__init__([], Align.HORIZONTAL, padding=2)
+        self.width = 40
+        self.height = 0
+        self.fill_available_space = False
+        self.hidden = False
 
-        self.width = 10
+    def on_input(self): ...
 
     def draw(self, pos) -> None:
-        super().draw(pos)
         pygame.draw.rect(window.surface, "yellow", (pos, (self.width, self.height)), width=2)

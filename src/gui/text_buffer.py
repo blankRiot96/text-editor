@@ -5,10 +5,11 @@ from src import window
 
 class TextBuffer:
     def __init__(self) -> None:
-        self.width = 980
+        self.width = 0
         self.height = 0
 
         self.fill_available_space = True
+        self.hidden = False
 
     def on_input(self):
         pass

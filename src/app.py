@@ -15,24 +15,23 @@ class App:
         window.surface = pygame.display.set_mode((1200, 800), pygame.RESIZABLE, vsync=1)
         window.width, window.height = window.surface.get_size()
 
-        # self.window_container = Stack(
-        #     [
-        #         MenuBar(),
-        #         Stack(
-        #             [
-        #                 FileTree(),
-        #                 LineNumbers(),
-        #                 Stack([TextBuffer(), HorizontalScrollBar()], Align.HORIZONTAL),
-        #                 VerticalScrollBar(),
-        #             ],
-        #             Align.HORIZONTAL,
-        #         ),
-        #     ],
-        #     Align.VERTICAL,
-        #     padding=20,
-        # )
-
-        self.window_container = Stack([FileTree(), TextBuffer()], Align.HORIZONTAL, padding=20)
+        self.window_container = Stack(
+            [
+                MenuBar(),
+                Stack(
+                    [
+                        FileTree(),
+                        LineNumbers(),
+                        Stack([TextBuffer(), HorizontalScrollBar()], Align.VERTICAL, padding=5),
+                        VerticalScrollBar(),
+                    ],
+                    Align.HORIZONTAL,
+                    padding=5,
+                ),
+            ],
+            Align.VERTICAL,
+            padding=5,
+        )
 
         self.resize_window()
         self.running = True
@@ -50,6 +49,8 @@ class App:
             elif event.type == pygame.VIDEORESIZE:
                 window.width, window.height = window.surface.get_size()
                 self.resize_window()
+            elif event.type == window.GUI_STACK_CHANGED:
+                self.window_container.resize_child_stacks()
 
         self.window_container.on_input()
 

@@ -14,6 +14,7 @@ class StackableWidget(t.Protocol):
     width: int
     height: int
     fill_available_space: bool
+    hidden: bool
 
     def on_input(self) -> None: ...
     def draw(self, pos: Point) -> None: ...
@@ -26,15 +27,20 @@ class Stack:
         alignment: Align,
         padding: int = 0,
     ) -> None:
-        self.widgets = widgets
+        self.all_widgets = widgets
+        self.populate_widgets()
         self.alignment = alignment
         self.padding = padding
 
-        self.fill_available_space = False
+        self.fill_available_space = True
+        self.hidden = False
 
         # Needs to be set by uppermost stack and calling `resize_child_stacks`
         self.width = 0
         self.height = 0
+
+    def populate_widgets(self):
+        self.widgets: list[StackableWidget] = [w for w in self.all_widgets if not w.hidden]
 
     def get_max_child_width(self) -> int:
         biggest_width = 0
@@ -71,34 +77,46 @@ class Stack:
                 widget.height = self.height
                 # widget.width = self.get_max_child_width()
 
+        self.expand_filler_widgets()
+
+        for widget in self.widgets:
             if isinstance(widget, Stack):
                 widget.resize_child_stacks()
 
-        self.expand_filler_widgets()
-
     def expand_filler_widgets(self):
-        filler_widgets = [w for w in self.widgets if w.fill_available_space]
+        filler_widgets = []
+        static_widgets = []
+        for widget in self.widgets:
+            if widget.fill_available_space:
+                filler_widgets.append(widget)
+            else:
+                static_widgets.append(widget)
+
         if not filler_widgets:
             return
 
         n = len(filler_widgets)
 
         if self.alignment == Align.VERTICAL:
-            available_space = (
-                self.height - self.calculate_vertical_position((0, 0), len(self.widgets) - 1).y
+            space_by_static_widgets = sum(w.height for w in static_widgets) + self.padding * len(
+                static_widgets
             )
+            available_space = self.height - space_by_static_widgets
             for widget in filler_widgets:
                 widget.height = int(available_space / n)
         elif self.alignment == Align.HORIZONTAL:
-            available_space = (
-                self.width - self.calculate_horizontal_position((0, 0), len(self.widgets) - 1).x
+            space_by_static_widgets = sum(w.width for w in static_widgets) + self.padding * len(
+                static_widgets
             )
+            available_space = self.width - space_by_static_widgets
             for widget in filler_widgets:
                 widget.width = int(available_space / n)
 
     def on_input(self):
-        for widget in self.widgets:
+        for widget in self.all_widgets:
             widget.on_input()
+
+        self.populate_widgets()
 
     def calculate_horizontal_position(
         self, initial_position: Point, nth_widget: int
