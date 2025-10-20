@@ -4,8 +4,10 @@ from src import window
 from src.gui.file_tree import FileTree
 from src.gui.line_numbers import LineNumbers
 from src.gui.menu_bar import MenuBar
+from src.gui.menu_screen import MenuScreen
 from src.gui.scroll_bar import HorizontalScrollBar, VerticalScrollBar
 from src.gui.stack import Align, Stack
+from src.gui.tabs import Tabs
 from src.gui.text_buffer import TextBuffer
 
 
@@ -22,7 +24,11 @@ class App:
                     [
                         FileTree(),
                         LineNumbers(),
-                        Stack([TextBuffer(), HorizontalScrollBar()], Align.VERTICAL, padding=5),
+                        Stack(
+                            [Tabs(), TextBuffer(), HorizontalScrollBar(), MenuScreen()],
+                            Align.VERTICAL,
+                            padding=5,
+                        ),
                         VerticalScrollBar(),
                     ],
                     Align.HORIZONTAL,
@@ -63,4 +69,3 @@ class App:
         while self.running:
             self.on_input()
             self.draw()
-            # break

@@ -1,10 +1,5 @@
-Always:
-    - File, Find, Settings menus
 
-When opening app:
-    - Open last opened folder
-        - Open filetree menu
-    - If no folder opened last: 
-        - Open Folder Button in center
-
+During launch:
+    - If no folder selected:
+        - Display "open a folder to get started"
 

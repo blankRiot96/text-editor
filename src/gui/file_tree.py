@@ -1,7 +1,6 @@
 import pygame
 
 from src import window
-from src.gui.stack import Align, Stack
 
 
 class FileTree:

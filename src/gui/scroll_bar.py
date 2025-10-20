@@ -11,7 +11,11 @@ class HorizontalScrollBar:
         self.fill_available_space = False
         self.hidden = False
 
-    def on_input(self): ...
+    def on_input(self):
+        for event in window.events:
+            if event.type == window.SHOW_MENU_SCREEN:
+                self.hidden = True
+
     def draw(self, pos: Point):
         pygame.draw.rect(window.surface, "blue", (pos, (self.width, self.height)), width=2)
 
@@ -23,6 +27,10 @@ class VerticalScrollBar:
         self.fill_available_space = False
         self.hidden = False
 
-    def on_input(self): ...
+    def on_input(self):
+        for event in window.events:
+            if event.type == window.SHOW_MENU_SCREEN:
+                self.hidden = True
+
     def draw(self, pos: Point):
         pygame.draw.rect(window.surface, "blue", (pos, (self.width, self.height)), width=2)
