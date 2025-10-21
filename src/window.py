@@ -8,3 +8,4 @@ height: int
 GUI_STACK_CHANGED = pygame.event.custom_type()
 SHOW_MENU_SCREEN = pygame.event.custom_type()
 HIDE_MENU_SCREEN = pygame.event.custom_type()
+ACTIVE_FILE_CHANGED = pygame.event.custom_type()

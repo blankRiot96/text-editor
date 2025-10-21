@@ -40,7 +40,11 @@ class App:
         )
 
         self.resize_window()
+        self.change_active_file()
         self.running = True
+
+    def change_active_file(self):
+        pygame.event.post(pygame.Event(window.ACTIVE_FILE_CHANGED, {"file-path": None}))
 
     def resize_window(self):
         self.window_container.width = window.width
