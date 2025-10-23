@@ -43,30 +43,15 @@ class Stack:
         self.widgets: list[StackableWidget] = [w for w in self.all_widgets if not w.hidden]
 
     def get_max_child_width(self) -> int:
-        biggest_width = 0
-        for widget in self.widgets:
-            if isinstance(widget, Stack) and widget.width == 0:
-                width = widget.get_max_child_width()
-            else:
-                width = widget.width
-
-            if width > biggest_width:
-                biggest_width = width
-
-        return biggest_width
+        return max(
+            self.widgets, key=lambda w: w.get_max_child_width() if isinstance(w, Stack) else w.width
+        ).width
 
     def get_max_child_height(self) -> int:
-        biggest_height = 0
-        for widget in self.widgets:
-            if isinstance(widget, Stack) and widget.height == 0:
-                height = widget.get_max_child_height()
-            else:
-                height = widget.height
-
-            if height > biggest_height:
-                biggest_height = height
-
-        return biggest_height
+        return max(
+            self.widgets,
+            key=lambda w: w.get_max_child_height() if isinstance(w, Stack) else w.height,
+        ).height
 
     def resize_child_stacks(self):
         for widget in self.widgets:
